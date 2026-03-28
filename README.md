@@ -1,58 +1,142 @@
+# AWS Cloud Security Projects
 
-# Welcome to your CDK Python project!
+Hands-on AWS cloud security engineering projects focused on identity monitoring, detection engineering, and security automation with Python CDK.
 
-This is a blank project for CDK development with Python.
+---
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+## Featured Project: Real-Time AssumeRole Detection Pipeline
 
-This project is set up like a standard Python project.  The initialization
-process also creates a virtualenv within this project, stored under the `.venv`
-directory.  To create the virtualenv it assumes that there is a `python3`
-(or `python` for Windows) executable in your path with access to the `venv`
-package. If for any reason the automatic creation of the virtualenv fails,
-you can create the virtualenv manually.
+Detects AWS `AssumeRole` activity from CloudTrail in near real time, extracts investigation-relevant context, and delivers a formatted SNS email alert for rapid triage.
 
-To manually create a virtualenv on MacOS and Linux:
+**Stack:** CloudTrail → EventBridge → Lambda → SNS  
+**IaC:** AWS CDK (Python)
 
-```
-$ python -m venv .venv
-```
+---
 
-After the init process completes and the virtualenv is created, you can use the following
-step to activate your virtualenv.
+## Why AssumeRole matters
 
-```
-$ source .venv/bin/activate
-```
+`AssumeRole` is a high-signal identity event that can appear in credential theft, lateral movement, privilege escalation, and cross-account access abuse scenarios. Near-real-time visibility improves investigation speed and reduces time-to-detect.
 
-If you are a Windows platform, you would activate the virtualenv like this:
+---
 
-```
-% .venv\Scripts\activate.bat
-```
+## What this demonstrates
 
-Once the virtualenv is activated, you can install the required dependencies.
+- AWS-native detection engineering
+- Identity-focused monitoring in AWS
+- Event-driven security automation
+- Serverless alerting with Lambda
+- Infrastructure as code with Python CDK
 
-```
-$ pip install -r requirements.txt
-```
+---
 
-At this point you can now synthesize the CloudFormation template for this code.
-
-```
-$ cdk synth
+## Architecture
+```text
+CloudTrail (API events)
+    → EventBridge (AssumeRole filter)
+        → Lambda (parse + enrich)
+            → SNS (email alert)
 ```
 
-To add additional dependencies, for example other CDK libraries, just add
-them to your `setup.py` file and rerun the `pip install -r requirements.txt`
-command.
+### EventBridge rule pattern
+```json
+{
+  "source": ["aws.sts"],
+  "detail-type": ["AWS API Call via CloudTrail"],
+  "detail": {
+    "eventSource": ["sts.amazonaws.com"],
+    "eventName": ["AssumeRole"]
+  }
+}
+```
 
-## Useful commands
+---
 
- * `cdk ls`          list all stacks in the app
- * `cdk synth`       emits the synthesized CloudFormation template
- * `cdk deploy`      deploy this stack to your default AWS account/region
- * `cdk diff`        compare deployed stack with current state
- * `cdk docs`        open CDK documentation
+## Alert fields
 
-Enjoy!
+Each alert includes:
+
+- Event time and name
+- Account ID and region
+- Source IP and user agent
+- Principal type and ARN
+- Principal account
+- Target role ARN
+- Role session name
+
+---
+
+## Example alert
+```
+Subject: [AWS Alert] AssumeRole detected in account 123456789012
+
+AWS AssumeRole activity detected.
+
+Time:               2025-03-27T18:42:11Z
+Event Name:         AssumeRole
+Account ID:         123456789012
+Region:             us-east-1
+Source IP:          203.0.113.10
+User Agent:         aws-cli/2.15.0
+
+Principal Type:     IAMUser
+Principal ARN:      arn:aws:iam::123456789012:user/admin-user
+Principal Account:  123456789012
+
+Target Role ARN:    arn:aws:iam::123456789012:role/SecurityAuditRole
+Role Session Name:  security-audit-session
+```
+
+---
+
+## Deploy
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+cdk bootstrap
+cdk deploy -c alert_email=you@example.com
+```
+
+This deploys the CloudTrail trail, EventBridge rule, Lambda function, SNS topic, and email subscription.
+
+After deploy, confirm the SNS subscription email before alerts will arrive.
+
+---
+
+## Planned v2 improvements
+
+- Suspicious activity logic for cross-account, off-hours, and privileged role usage
+- Severity scoring
+- Allowlists for approved principals
+- Dead-letter queue
+- Unit tests for Lambda parsing logic
+- Security Hub findings integration
+
+---
+
+## Evidence
+
+Deployment and testing proof:
+
+- `evidence/01-sns-subscription-confirmed.png` — SNS subscription confirmed
+- `evidence/02-cdk-deploy-success.png` — CDK deploy: 15/15 resources CREATE_COMPLETE
+- `evidence/03-lambda-test-success.png` — Lambda test: statusCode 200, messageId returned
+- `evidence/04-alert-email.png` — Alert email delivered to inbox with full context
+- `evidence/05-eventbridge-rule.png` — EventBridge rule enabled and pattern confirmed
+
+---
+
+## Repository structure
+```
+aws-cloud-security-projects/
+├── README.md
+├── assumerole_alerting/
+│   └── assumerole_alerting_stack.py
+├── lambda/
+│   └── handler.py
+├── examples/
+│   └── sample-cloudtrail-assumerole-event.json
+├── evidence/
+├── app.py
+└── requirements.txt
+```
