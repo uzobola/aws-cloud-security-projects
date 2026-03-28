@@ -1,0 +1,37 @@
+{
+  "version": "0",
+  "id": "11111111-2222-3333-4444-555555555555",
+  "detail-type": "AWS API Call via CloudTrail",
+  "source": "aws.sts",
+  "account": "123456789012",
+  "time": "2025-03-27T18:42:11Z",
+  "region": "us-east-1",
+  "resources": [],
+  "detail": {
+    "eventVersion": "1.08",
+    "userIdentity": {
+      "type": "IAMUser",
+      "principalId": "AIDAEXAMPLE123456789",
+      "arn": "arn:aws:iam::123456789012:user/admin-user",
+      "accountId": "123456789012",
+      "userName": "admin-user"
+    },
+    "eventTime": "2025-03-27T18:42:11Z",
+    "eventSource": "sts.amazonaws.com",
+    "eventName": "AssumeRole",
+    "awsRegion": "us-east-1",
+    "sourceIPAddress": "203.0.113.10",
+    "userAgent": "aws-cli/2.15.0",
+    "requestParameters": {
+      "roleArn": "arn:aws:iam::123456789012:role/SecurityAuditRole",
+      "roleSessionName": "security-audit-session"
+    },
+    "responseElements": {
+      "assumedRoleUser": {
+        "assumedRoleId": "AROAXAMPLE:linkedin-demo",
+        "arn": "arn:aws:sts::123456789012:assumed-role/SecurityAuditRole/security-audit-session"
+      }
+    },
+    "recipientAccountId": "123456789012"
+  }
+}
