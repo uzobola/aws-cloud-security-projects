@@ -30,6 +30,11 @@ Detects AWS `AssumeRole` activity from CloudTrail in near real time, extracts in
 ---
 
 ## Architecture
+
+![Real-Time AWS AssumeRole Detection and Alerting Architecture](evidence/architecture-diagram.png)
+
+Pipeline flow:
+
 ```text
 CloudTrail (API events)
     → EventBridge (AssumeRole filter)
@@ -88,6 +93,18 @@ Role Session Name:  security-audit-session
 
 ---
 
+## Evidence
+
+Deployment and testing proof:
+
+- `evidence/01-sns-subscription-confirmed.png` — SNS subscription confirmed
+- `evidence/02-cdk-deploy-success.png` — CDK deploy: 15/15 resources CREATE_COMPLETE
+- `evidence/03-lambda-test-success.png` — Lambda test: statusCode 200, messageId returned
+- `evidence/04-alert-email.png` — Alert email delivered to inbox with full context
+- `evidence/05-eventbridge-rule.png` — EventBridge rule enabled and pattern confirmed
+
+---
+
 ## Deploy
 ```bash
 python3 -m venv .venv
@@ -114,18 +131,6 @@ After deploy, confirm the SNS subscription email before alerts will arrive.
 
 ---
 
-## Evidence
-
-Deployment and testing proof:
-
-- `evidence/01-sns-subscription-confirmed.png` — SNS subscription confirmed
-- `evidence/02-cdk-deploy-success.png` — CDK deploy: 15/15 resources CREATE_COMPLETE
-- `evidence/03-lambda-test-success.png` — Lambda test: statusCode 200, messageId returned
-- `evidence/04-alert-email.png` — Alert email delivered to inbox with full context
-- `evidence/05-eventbridge-rule.png` — EventBridge rule enabled and pattern confirmed
-
----
-
 ## Repository structure
 ```
 aws-cloud-security-projects/
@@ -137,6 +142,12 @@ aws-cloud-security-projects/
 ├── examples/
 │   └── sample-cloudtrail-assumerole-event.json
 ├── evidence/
+│   ├── architecture-diagram.png
+│   ├── 01-sns-subscription-confirmed.png
+│   ├── 02-cdk-deploy-success.png
+│   ├── 03-lambda-test-success.png
+│   ├── 04-alert-email.png
+│   └── 05-eventbridge-rule.png
 ├── app.py
 └── requirements.txt
 ```
