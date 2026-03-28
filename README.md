@@ -102,6 +102,7 @@ Deployment and testing proof:
 - `evidence/03-lambda-test-success.png` — Lambda test: statusCode 200, messageId returned
 - `evidence/04-alert-email.png` — Alert email delivered to inbox with full context
 - `evidence/05-eventbridge-rule.png` — EventBridge rule enabled and pattern confirmed
+- `evidence/06-cloudtrail-trail.png` — CloudTrail trail active and logging
 
 ---
 
