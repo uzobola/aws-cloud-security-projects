@@ -1,4 +1,4 @@
-# AWS Cloud Security Projects
+# IAM Cross-Account Detection Pipeline
 
 Hands-on AWS cloud security engineering projects focused on identity monitoring, detection engineering, and security automation with Python CDK.
 
