@@ -56,6 +56,19 @@ class AssumeRoleAlertingStack(cdk.Stack):
             Path(__file__).resolve().parent.parent / "lambda"
         )
 
+        # Optional comma-separated allowlist of trusted role/principal ARNs.
+        # These are passed to the Lambda as environment configuration so detection
+        # logic can treat known automation as Low severity without hardcoding account-
+        # specific values into the function code.
+        trusted_roles = self.node.try_get_context("trusted_roles")
+
+        lambda_environment = {
+            "SNS_TOPIC_ARN": topic.topic_arn,
+        }
+
+        if trusted_roles:
+            lambda_environment["TRUSTED_ROLE_ARNS"] = trusted_roles
+
         fn = _lambda.Function(
             self,
             "AssumeRoleAlertFunction",
@@ -63,9 +76,7 @@ class AssumeRoleAlertingStack(cdk.Stack):
             handler="handler.lambda_handler",
             code=_lambda.Code.from_asset(lambda_code_path),
             timeout=Duration.seconds(30),
-            environment={
-                "SNS_TOPIC_ARN": topic.topic_arn,
-            },
+            environment=lambda_environment,
             description="Formats CloudTrail AssumeRole events and sends SNS alerts",
         )
 
