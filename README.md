@@ -181,9 +181,7 @@ After deploy, confirm the SNS subscription email before alerts will arrive.
 
 ---
 
-## Roadmap
-
-This project now includes threat mapping, severity scoring, trusted role allowlisting, compliance framework mapping, and unit tests for severity classification. Future improvements will focus on expanding detection coverage and operational resilience.
+## Detection Coverage Roadmap
 
 - Add additional EventBridge detections for root login, IAM policy changes, and S3 public access changes
 - Add advanced suspicious activity logic for off-hours access and privileged role usage
