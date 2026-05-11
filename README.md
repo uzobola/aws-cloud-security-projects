@@ -1,5 +1,7 @@
 # IAM Cross-Account Detection Pipeline
 
+![IAM Cross-Account Detection Pipeline Architecture](evidence/project-banner.png)
+
 Hands-on AWS cloud security engineering projects focused on identity monitoring, detection engineering, and security automation with Python CDK.
 
 ---
@@ -160,6 +162,7 @@ Deployment and testing proof:
 - `evidence/04-alert-email.png` — Alert email delivered to inbox with full context
 - `evidence/05-eventbridge-rule.png` — EventBridge rule enabled and pattern confirmed
 - `evidence/06-cloudtrail-trail.png` — CloudTrail trail active and logging
+- `evidence/07-severity-tests-passed.png` — Unit tests passed for High/Medium/Low severity scoring
 
 ---
 
