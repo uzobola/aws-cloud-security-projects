@@ -86,6 +86,20 @@ This creates a bridge between detection engineering and GRC by showing how cloud
 
 ---
 
+## Compliance Impact
+
+This project supports security monitoring and access oversight by converting AWS identity telemetry into actionable evidence for review, triage, and audit support.
+
+| GRC outcome | How this project supports it |
+|---|---|
+| Security monitoring evidence | Uses CloudTrail, EventBridge, Lambda, and SNS to detect AssumeRole activity in near real time |
+| Access review support | Highlights cross-account role assumptions that may require IAM governance review |
+| Incident triage evidence | Includes principal, target role ARN, source IP, user agent, account context, and severity in alerts |
+| Framework alignment | Maps detection activity to NIST CSF DE.CM-3, SOC 2 CC7.2, and CIS logging and monitoring expectations |
+| Threat-informed compliance | Maps AssumeRole abuse patterns to MITRE ATT&CK T1078 and T1550.001 |
+
+---
+
 ## Architecture
 
 ![Real-Time AWS AssumeRole Detection and Alerting Architecture](evidence/architecture-diagram.png)
